@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Air Quality API</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">    
+</head>
+
+<body>
+
+    <div class="container d-flex justify-content-center mt-4">
+        <h3 class="mx-auto">Real time Air Quality Index from various location</h3>
+    </div>
+    <div class="d-flex mt-4">
+        <div id="info" class="mx-auto"></div>
+    </div>
+
+    <script>
+        function fetchInfo() {
+            var queryURL = "https://api.data.gov.in/resource/3b01bcb8-0b14-4abf-b6f2-c1bfd384ba69?api-key=579b464db66ec23bdd000001cdd3946e44ce4aad7209ff7b23ac571b&format=json&offset=10&limit=10&filters[city]=Pune";
+
+            fetch(queryURL)
+                .then(function (response) {
+                    return response.json();
+                    console.log(data)
+
+                })
+                .then(function (data) {
+
+                    var rows = data.records;
+                    var rowlength = rows.length;
+                    console.log(data);
+                    function displaytable(data) {
+
+                        var usersDiv = document.querySelector('#info');
+                        usersDiv.innerHTML = ""
+
+                        var table = document.createElement('table');
+
+                        var html = "<table class='table table-bordered table-responsive'>";
+                            html += "<thead class='thead-dark'>";
+                            html += "<tr>";
+                            html += "<th>" + "ID" + "</th>";
+                            html += "<th>" + "City" + "</th>";
+                            html += "<th>" + "Station" + "</th>";
+                            html += "<th>" + "Pollutant ID" + "</th>";
+                            html += "<th>" + "Pollutant Max" + "</th>";
+                            html += "<th>" + "Pollutant Min" + "</th>";
+                            html += "<th>" + "Pollutant Avg" + "</th>";
+                            html += "</tr>";
+                            html += "</thead>";
+
+                        for (var i = 0; i < rowlength; i++) {
+                            html += "<tr>";
+                            html += "<td>" + rows[i].id + "</td>";
+                            html += "<td>" + rows[i].city + "</td>";
+                            html += "<td>" + rows[i].station + "</td>";
+                            html += "<td>" + rows[i].pollutant_id + "</td>";
+                            html += "<td>" + rows[i].pollutant_max + "</td>";
+                            html += "<td>" + rows[i].pollutant_min + "</td>";
+                            html += "<td>" + rows[i].pollutant_avg + "</td>";
+                            html += "</tr>";
+
+                        }
+                        html += "</table>";
+                        usersDiv.innerHTML = html;
+                    }
+                    displaytable(data);
+                })
+                .catch(function (error) {
+                    console.log('Error during fetch: ' + error.message);
+                });
+        }
+
+        fetchInfo();
+    </script>
+</body>
+
+</html>
